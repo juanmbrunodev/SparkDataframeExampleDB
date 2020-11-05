@@ -14,6 +14,7 @@
         <scala.version>2.12</scala.version>
         <spark.version>3.0.0-preview2</spark.version>
         <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
+        <derby.version>10.14.2.0</derby.version>
     </properties>
 
     <dependencies>
@@ -58,6 +59,25 @@
             <version>4.11</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- Database Dependencies-->
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derby</artifactId>
+            <version>${derby.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derbynet</artifactId>
+            <version>${derby.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derbyclient</artifactId>
+            <version>${derby.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -79,7 +99,7 @@
                     <executable>java</executable>
                     <arguments>
                         <argument>-classpath</argument>
-                        <classpath />
+                        <classpath/>
                         <argument>com.jmb.DataFrameBasicsMain</argument>
                     </arguments>
                 </configuration>

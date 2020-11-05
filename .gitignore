@@ -37,3 +37,8 @@ out/
 ## MacOS Files
 ##############################
 .DS_Store
+
+#OTHER
+derby.log
+src/main/resources/spark-data/enriched_transactions
+firstdb/
