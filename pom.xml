@@ -100,7 +100,7 @@
                     <arguments>
                         <argument>-classpath</argument>
                         <classpath/>
-                        <argument>com.jmb.DataFrameBasicsMain</argument>
+                        <argument>com.jmb.DataFrameBasicsDBMain</argument>
                     </arguments>
                 </configuration>
             </plugin>

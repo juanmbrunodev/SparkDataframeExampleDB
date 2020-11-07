@@ -7,7 +7,15 @@ import org.apache.spark.sql.SaveMode;
 import org.apache.spark.sql.SparkSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Comparator;
 import java.util.Properties;
+import java.util.stream.Stream;
 
 import static com.jmb.persistence.SalesTransactionsDbManager.DB_URL;
 import static org.apache.spark.sql.functions.lit;
@@ -16,7 +24,8 @@ public class DataFrameBasicsDBMain {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DataFrameBasicsDBMain.class);
     private static final String SPARK_FILES_FORMAT = "csv";
-
+    public static final String PATH_RESOURCES = "src/main/resources/spark-data/electronic-card-transactions.csv";
+    public static final String PATH_FOLDER_RESOURCES = "src/main/resources/spark-data/enriched_transactions";
 
     public static void main(String[] args) throws Exception {
 
@@ -27,6 +36,9 @@ public class DataFrameBasicsDBMain {
     }
 
     private void init() throws Exception {
+
+        LOGGER.info("Deleting previous resources generated, if any...");
+        deletePreviousFiles(PATH_FOLDER_RESOURCES);
 
         LOGGER.info("Bootstrapping DB Resources");
         //Start Embedded DB Server from within this application's process by connecting (Derby)
@@ -42,7 +54,7 @@ public class DataFrameBasicsDBMain {
         Dataset<Row> df = session.read()
                 .format(SPARK_FILES_FORMAT)
                 .option("header", "true")
-                .load("src/main/resources/spark-data/electronic-card-transactions.csv");
+                .load(PATH_RESOURCES);
 
         //Apply a Transformation - Add a new Column to the dataframe for final transactions values
         Dataset<Row> results = df.withColumn("total_units_value",
@@ -60,9 +72,17 @@ public class DataFrameBasicsDBMain {
 
         //Create CSV Output file
         df.write().format(SPARK_FILES_FORMAT)
+                .mode(SaveMode.Overwrite)
                 .save("src/main/resources/spark-data/enriched_transactions");
 
         //Print first 15 rows to output
         results.show(15);
+    }
+
+    private void deletePreviousFiles(String resourcesPath) throws IOException {
+        Stream<Path> allContents = Files.list(Paths.get(resourcesPath));
+        allContents.sorted(Comparator.reverseOrder())
+                .map(Path::toFile)
+                .forEach(File::delete);
     }
 }
