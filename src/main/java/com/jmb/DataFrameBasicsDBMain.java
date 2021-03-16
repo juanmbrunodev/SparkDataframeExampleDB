@@ -1,6 +1,7 @@
 package com.jmb;
 
 import com.jmb.persistence.SalesTransactionsDbManager;
+import org.apache.spark.SparkConf;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SaveMode;
@@ -45,9 +46,12 @@ public class DataFrameBasicsDBMain {
         SalesTransactionsDbManager salesTransactionsDbManager = new SalesTransactionsDbManager();
         salesTransactionsDbManager.startDB();
 
+        SparkConf appConfig = new SparkConf().set("spark.testing.memory", "900000000");
+
         //Create the Spark Session
         SparkSession session = SparkSession.builder()
                 .appName("DataFrameBasicsDB")
+                .config(appConfig)
                 .master("local").getOrCreate();
 
         //Ingest data from CSV file into a DataFrame
@@ -76,7 +80,7 @@ public class DataFrameBasicsDBMain {
                 .save("src/main/resources/spark-data/enriched_transactions");
 
         //Print first 15 rows to output
-        results.show(15);
+        results.show(7);
     }
 
     private void deletePreviousFiles(String resourcesPath) {
