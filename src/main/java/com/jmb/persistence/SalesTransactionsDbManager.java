@@ -10,7 +10,7 @@ public class SalesTransactionsDbManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(SalesTransactionsDbManager.class);
 
     public static final String TABLE_NAME = "INIT";
-    public static final String DB_URL = "jdbc:derby:firstdb;user=app;password=derby";
+    public static final String DB_URL = "jdbc:derby:firstdb;create=true;user=app;password=derby";
     public static final String EMBEDDED_DRIVER_STRING = "org.apache.derby.jdbc.EmbeddedDriver";
 
     public void startDB() throws SQLException {
@@ -81,14 +81,13 @@ public class SalesTransactionsDbManager {
 
         try (Statement stmt = connection.createStatement()) {
             //Drop table if it already exists
-            stmt.executeUpdate("Drop Table " + TABLE_NAME);
+            //stmt.executeUpdate("Drop Table " + TABLE_NAME);
             // create placeholder empty table
             String query = "CREATE TABLE INIT" + " (id integer)";
             stmt.executeUpdate(query);
         } catch (SQLException e) {
             //Log exception and rethrow
             LOGGER.error("Error while creating the TABLE in DB: " + e.getMessage());
-            throw e;
         }
     }
 }

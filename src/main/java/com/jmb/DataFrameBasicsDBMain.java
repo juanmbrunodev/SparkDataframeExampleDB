@@ -79,10 +79,15 @@ public class DataFrameBasicsDBMain {
         results.show(15);
     }
 
-    private void deletePreviousFiles(String resourcesPath) throws IOException {
-        Stream<Path> allContents = Files.list(Paths.get(resourcesPath));
-        allContents.sorted(Comparator.reverseOrder())
-                .map(Path::toFile)
-                .forEach(File::delete);
+    private void deletePreviousFiles(String resourcesPath) {
+        try {
+            Stream<Path> allContents = Files.list(Paths.get(resourcesPath));
+            allContents.sorted(Comparator.reverseOrder())
+                    .map(Path::toFile)
+                    .forEach(File::delete);
+        } catch (Exception nfe) {
+            LOGGER.info("No previous generated file found, skipping...");
+        }
+
     }
 }
