@@ -44,12 +44,13 @@ public class SalesTransactionsDbManager {
             int columnsNumber = rsmd.getColumnCount();
 
             while (resultSet.next() && printed < numRecords) {
+                LOGGER.info("======= RECORD: " + printed + " ===========");
                 for (int i = 1; i <= columnsNumber; i++) {
                     if (i > 1) System.out.print(",  ");
                     String columnValue = resultSet.getString(i);
-                    LOGGER.info(columnValue + " " + rsmd.getColumnName(i));
+                    LOGGER.info("COLUMN: " + rsmd.getColumnName(i) +  " - VALUE:  " + columnValue);
                 }
-                LOGGER.info("");
+                LOGGER.info("================================");
                 printed++;
             }
 

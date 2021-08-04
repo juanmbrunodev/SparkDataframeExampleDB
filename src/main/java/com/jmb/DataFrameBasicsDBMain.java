@@ -67,12 +67,12 @@ public class DataFrameBasicsDBMain {
 
         //Persist to DB through Spark JDBC methods
         Properties prop = salesTransactionsDbManager.buildDBProperties();
-        df.write().mode(SaveMode.Overwrite)
+        results.write().mode(SaveMode.Overwrite)
                 .jdbc(DB_URL,
                         SalesTransactionsDbManager.TABLE_NAME, prop);
 
         //Print results in DB
-        salesTransactionsDbManager.displayTableResults(15);
+        salesTransactionsDbManager.displayTableResults(6);
 
         //Create CSV Output file
         df.write().format(SPARK_FILES_FORMAT)
